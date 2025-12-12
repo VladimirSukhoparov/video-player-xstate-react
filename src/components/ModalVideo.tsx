@@ -5,21 +5,17 @@ import {
   PauseOutlined,
   ShrinkOutlined,
 } from "@ant-design/icons";
-import { useState, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import { VideoPlayer } from "./VideoPlayer";
+import type { VideoEvent } from "../machines/videoMachine";
 
 interface ModalVideoProps {
-  open: boolean;
-  setOpen: (open: boolean) => void;
+  state: "playing" | "paused" | "closed";
+  width: "default" | "mini";
+  send: (event: VideoEvent) => void;
 }
 
-export const ModalVideo = ({ open, setOpen }: ModalVideoProps) => {
-  const [paused, setPaused] = useState(false);
-
-  const closeModal = () => {
-    setOpen(false);
-    setPaused(false);
-  };
+export const ModalVideo = ({ state, width, send }: ModalVideoProps) => {
   const modalStyles = {
     header: {
       borderBottom: "1px solid #f0f0f0",
@@ -38,9 +34,9 @@ export const ModalVideo = ({ open, setOpen }: ModalVideoProps) => {
       margin: 0,
       padding: "10px 16px",
     },
-    container:{
-        padding:0,
-    }
+    container: {
+      padding: 0,
+    },
   };
 
   const footer: ReactNode = (
@@ -52,8 +48,18 @@ export const ModalVideo = ({ open, setOpen }: ModalVideoProps) => {
           borderRadius: "50%",
           cursor: "pointer",
         }}
+        onClick={() =>
+          send({
+            type: "SET_WIDTH",
+            width: width === "mini" ? "default" : "mini",
+          })
+        }
       >
-        <ArrowsAltOutlined />
+        {width === "mini" ? (
+          <ArrowsAltOutlined style={{ fontSize: "16px" }} />
+        ) : (
+          <ShrinkOutlined style={{ fontSize: "16px" }} />
+        )}
       </Button>
       <Button
         style={{
@@ -62,19 +68,9 @@ export const ModalVideo = ({ open, setOpen }: ModalVideoProps) => {
           borderRadius: "50%",
           cursor: "pointer",
         }}
+        onClick={() => send({ type: "TOGGLE_PAUSE" })}
       >
-        <ShrinkOutlined style={{ fontSize: "16px" }} />
-      </Button>
-      <Button
-        style={{
-          width: "32px",
-          height: "32px",
-          borderRadius: "50%",
-          cursor: "pointer",
-        }}
-        onClick={() => setPaused(!paused)}
-      >
-        {paused ? (
+        {state === "paused" ? (
           <CaretRightOutlined style={{ fontSize: "16px" }} />
         ) : (
           <PauseOutlined style={{ fontSize: "16px" }} />
@@ -84,16 +80,19 @@ export const ModalVideo = ({ open, setOpen }: ModalVideoProps) => {
   );
   return (
     <Modal
-      open={open}
+      open={state !== "closed"}
       title="Video Player"
       footer={footer}
-      width={1000}
-      style={{ margin: "5vh auto auto" }}
-      onCancel={closeModal}
+      centered
+      width={width === "mini" ? 500 : 1000}
+      onCancel={() => {
+        if (state !== "paused") send({ type: "TOGGLE_PAUSE" });
+        setTimeout(() => send({ type: "CLOSE" }), 0);
+      }}
       styles={modalStyles}
     >
       <div style={{ width: "100%", height: "100%", backgroundColor: "white" }}>
-        <VideoPlayer paused={paused} />
+        <VideoPlayer state={state} />
       </div>
     </Modal>
   );
