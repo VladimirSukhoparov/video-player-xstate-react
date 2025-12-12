@@ -1,7 +1,18 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
   text-align: center;
 }
 
+.player_box {
+  width: 300px;
+  height: 150px;
+  border: 2px solid #8585ff;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 25vh auto auto;
+}
+
+.ant-modal-container {
+  padding: 0 !important;
+}
