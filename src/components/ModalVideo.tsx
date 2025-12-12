@@ -38,6 +38,9 @@ export const ModalVideo = ({ open, setOpen }: ModalVideoProps) => {
       margin: 0,
       padding: "10px 16px",
     },
+    container:{
+        padding:0,
+    }
   };
 
   const footer: ReactNode = (
