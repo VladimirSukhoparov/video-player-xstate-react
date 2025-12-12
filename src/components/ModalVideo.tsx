@@ -16,6 +16,10 @@ interface ModalVideoProps {
 export const ModalVideo = ({ open, setOpen }: ModalVideoProps) => {
   const [paused, setPaused] = useState(false);
 
+  const closeModal = () => {
+    setOpen(false);
+    setPaused(false);
+  };
   const modalStyles = {
     header: {
       borderBottom: "1px solid #f0f0f0",
@@ -46,8 +50,17 @@ export const ModalVideo = ({ open, setOpen }: ModalVideoProps) => {
           cursor: "pointer",
         }}
       >
+        <ArrowsAltOutlined />
+      </Button>
+      <Button
+        style={{
+          width: "32px",
+          height: "32px",
+          borderRadius: "50%",
+          cursor: "pointer",
+        }}
+      >
         <ShrinkOutlined style={{ fontSize: "16px" }} />
-        {/* <ArrowsAltOutlined /> */}
       </Button>
       <Button
         style={{
@@ -73,7 +86,7 @@ export const ModalVideo = ({ open, setOpen }: ModalVideoProps) => {
       footer={footer}
       width={1000}
       style={{ margin: "5vh auto auto" }}
-      onCancel={() => setOpen(false)}
+      onCancel={closeModal}
       styles={modalStyles}
     >
       <div style={{ width: "100%", height: "100%", backgroundColor: "white" }}>
