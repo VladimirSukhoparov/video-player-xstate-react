@@ -7,7 +7,7 @@ interface VideoPlayerProps {
 
 export const VideoPlayer = ({paused}: VideoPlayerProps) => {
   const ref = useRef<HTMLVideoElement>(null);
-  const src ="https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
+  const src ="https://sample.vodobox.net/skate_phantom_flex_4k/skate_phantom_flex_4k.m3u8"
   useEffect(() => {
     const video = ref.current;
     if (!video) return;
